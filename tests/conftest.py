@@ -8,6 +8,9 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
+HEADLESS = True
+
+
 @pytest.fixture(params=['chrome_browser', 'firefox_browser'])
 def browser(request):
     return request.getfixturevalue(request.param)
@@ -16,7 +19,8 @@ def browser(request):
 @pytest.fixture
 def chrome_browser():
     options = ChromeOptions()
-    options.add_argument("--headless")
+    if HEADLESS:
+        options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-extensions")
@@ -37,7 +41,7 @@ def chrome_browser():
 @pytest.fixture
 def firefox_browser():
     options = FirefoxOptions()
-    options.headless = True
+    options.headless = HEADLESS
     
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
     
